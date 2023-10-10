@@ -6,7 +6,7 @@
 
 We couldn't provide our service or build our tools without open source software. Our amazing engineering team believes in giving back to the community, and the projects hosted here are only one way to accomplish that. The resources in this repository will help to ensure high standards and mutual respect for the entire community.
 
-### [License](https://github.com/Nice-Healthcare/.github/blob/main/LICENSE.md)
+### [License](https://github.com/Nice-Healthcare/.github/blob/main/LICENSE)
 
 Sharing is caring. The MIT license is permissive.
 
