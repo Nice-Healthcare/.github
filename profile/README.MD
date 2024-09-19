@@ -1,4 +1,4 @@
-[![Nice Healthcare](logo-and-name.png)](https://nice.healthcare)
+[![Nice Healthcare](../logo-and-name.png)](https://nice.healthcare)
 
 **Nice is an integrated primary care clinic that treats nearly all of your everyday healthcare needs from your home, office, or wherever is most convenient for you.**
 
