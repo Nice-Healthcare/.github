@@ -6,6 +6,8 @@ This style guide is based on the Swift standard library style and takes inspirat
 
 * [Swift Standard Library Reference](https://developer.apple.com/documentation/swift)
 
+* [SwiftFormat](https://github.com/nicklockwood/SwiftFormat)
+
 # Fundamentals
 
 * **Clarity is more important than brevity**: Brevity is not a primary goal. Code should be made more concise only if other good qualities - such as readability, simplicity, and clarity - remain equal or are improved.
@@ -124,23 +126,11 @@ By default Xcode places the following comment block at the top of new Swift file
 
 A source file imports exactly the top-level modules that it needs; nothing more and nothing less. Imports of whole modules are preferred to imports of individual declarations or submodules.
 
-Specifically on Apple platforms, import only the modules a source file requires. For example, don't import `UIKit` when importing `Foundation` will suffice. Likewise, don't import `Foundation` if you must import `UIKit`.
+Specifically on Apple platforms, import only the modules a source file requires. For example, don't import `UIKit` when importing `Foundation` will suffice. Likewise, don't import `Foundation` if you must import `UIKit`. (_An exception is when `UIKit/AppKit` is conditionally imported and `Foundation` is also used._)
 
 There is no 'strict' guide for the ordering of imports and the compiler should be able to handle any order; the key should be to remain consistent within the project. Strategies that _could_ be used are:
 
-* **Alphabetical**: All imports are ordered lexicographically (A to Z)
-
-* **Order of Reference**: Imports are added as needed (typically automatically by the IDE)
-
-* **Broad to Narrow**: Imports are order with the most broad to narrow usage:
-  
-  * `import Foundation` // One step above the 'standard library'
-  
-  * `import CoreGraphics` // A system library
-  
-  * `import Toolkit` // Some swift package
-  
-  * `@testable import Product` // Module undergoing testing
+All imports should be ordered lexicographically (A to Z).
 
 ### Line Width
 
@@ -158,10 +148,10 @@ Xcode automatically uses four (4) spaces to represent a tab in Swift files. JSON
 
 ### Trailing Whitespace
 
-In general, whitespace should be removed from lines. But, indentation can be maintained between blocks of code within a type declaration. Again this follows the default settings in Xcode:
+In general, whitespace should be removed from lines; Xcode can be configured with the following options:
 
 * [x] Automatically trim trailing whitespace
-* [ ] Including whitespace-only lines
+* [x] Including whitespace-only lines
 
 ### Braces
 
@@ -179,7 +169,7 @@ There are several exceptions to this rule:
 
 * **Empty Blocks**:
   
-  It is common when prototyping of defining locally scoped types to not have an implementation. Under these conditions a closing brace can follow the opening brace:
+  It is common when prototyping of defining locally scoped types to not have an implementation. Under these conditions a closing brace should follow the opening brace:
   
   ```swift
   protocol FancyLad {}
@@ -192,7 +182,7 @@ There are several exceptions to this rule:
   ```
 
 * **Property Requirements**:
-  A protocol can require any conforming type to provide an instance property or type property with a particular name and type. The protocol doesn’t specify whether the property should be a stored property or a computed property—it only specifies the required property name and type. The protocol also specifies whether each property must be gettable or gettable *and* settable.
+  A protocol can require any conforming type to provide an instance property or type property with a particular name and type. The protocol doesn’t specify whether the property should be a stored property or a computed property — it only specifies the required property name and type. The protocol also specifies whether each property must be gettable or gettable *and* settable.
   
   ```swift
   protocol Picture {
