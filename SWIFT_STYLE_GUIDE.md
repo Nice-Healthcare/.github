@@ -128,9 +128,7 @@ A source file imports exactly the top-level modules that it needs; nothing more 
 
 Specifically on Apple platforms, import only the modules a source file requires. For example, don't import `UIKit` when importing `Foundation` will suffice. Likewise, don't import `Foundation` if you must import `UIKit`. (_An exception is when `UIKit/AppKit` is conditionally imported and `Foundation` is also used._)
 
-There is no 'strict' guide for the ordering of imports and the compiler should be able to handle any order; the key should be to remain consistent within the project. Strategies that _could_ be used are:
-
-All imports should be ordered lexicographically (A to Z).
+Import statements will automatically be be ordered lexicographically (A to Z).
 
 ### Line Width
 
