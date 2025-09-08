@@ -329,7 +329,7 @@ You specify an attribute by writing the @ symbol followed by the attribute’s n
 @{attribute name}{(attribute arguments)}
 ```
 
-In general, attributes are declared on their own lines, prefixing the type or declaration that are supporting:
+In general, attributes are declared on their own lines, prefixing the type or declaration that they are supporting:
 
 ```swift
 @MainActor
