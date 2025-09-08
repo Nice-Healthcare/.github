@@ -40,6 +40,8 @@ This style guide is based on the Swift standard library style and takes inspirat
   
   * [Naming](#naming)
   
+  * [Protocol Conformances](#protocol-conformances)
+  
   * [Attributes](#attributes)
   
   * [Line Wrapping](#line-wrapping)
@@ -225,7 +227,7 @@ There are several exceptions to this rule:
   
   var isMaybeAvailable: Bool {
       get throws {
-          try calcuateAvailability()
+          try calculateAvailability()
       }
   }
   
@@ -235,7 +237,7 @@ There are several exceptions to this rule:
   
   var isMaybeAvailable: Bool {
       get async {
-          await calcuateAvailability()
+          await calculateAvailability()
       }
   }
   ```
@@ -261,9 +263,65 @@ There are several exceptions to this rule:
 
 * Booleans should include a verb prefix - `is`, `has`, `will`, `did` - to help make it clear the property is not another type.
 
+### Protocol Conformances
+
+Types that declare a conformance to a Protocol typically come in two flavors:
+
+The first being inline with the full type declaration. This simple type has no customization or non-default implementations of the expressed protocols. For example:
+
+```swift
+struct MembershipType: Hashable, Identifiable, Codable, Sendable {
+  let id: Int
+  let name: String
+}
+```
+
+When customization or clarity is needed, it might be best to express conformance as an extension to the type. (This can help those unfamiliar with the specified protocols to what their specific conformance entails.) For example:
+
+```swift
+/// A string-based type which functions similar to an `enum` but can be expanded-on by the implementor.
+struct NonDescriptiveStatus: Hashable, Sendable {
+  let rawValue: String
+
+  // Pre-defined/Known statuses
+  static let bad: Self = "BAD"
+  static let good: Self = "GOOD"
+  static let unknown: Self = "UNKNOWN"
+}
+
+// Allows the type to be initialized using a string literal (`let status: NonDescriptiveStatus = "OK"`) 
+extension NonDescriptiveStatus: ExpressibleByStringLiteral {
+  init(stringLiteral rawValue: String) {
+    self.rawValue = rawValue
+  }
+}
+
+// Overrides the default de/serialization to a primitive String.
+extension NonDescriptiveStatus: Codable {
+  init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    rawValue = try container.decode(String.self)
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
+    try container.encode(rawValue)
+  }
+}
+
+// The known enumeration values associated with the type.
+extension NonDescriptiveStatus: CaseIterable {
+  static let allCases: [NonDescriptiveStatus] = [
+    .bad,
+    .good,
+    .unknown,
+  ]
+}
+```
+
 ### Attributes
 
-There are two kinds of attributes in Swift—those that apply to declarations and those that apply to types. An attribute provides additional information about the declaration or type. For example, the discardableResult attribute on a function declaration indicates that, although the function returns a value, the compiler shouldn’t generate a warning if the return value is unused.
+There are two kinds of attributes in Swift — those that apply to declarations and those that apply to types. An attribute provides additional information about the declaration or type. For example, the discardableResult attribute on a function declaration indicates that, although the function returns a value, the compiler shouldn’t generate a warning if the return value is unused.
 
 You specify an attribute by writing the @ symbol followed by the attribute’s name and any arguments that the attribute accepts:
 
@@ -271,28 +329,27 @@ You specify an attribute by writing the @ symbol followed by the attribute’s n
 @{attribute name}{(attribute arguments)}
 ```
 
-For consistency, attributes should be declared on the same line as the rest of the type definition (that is unless the addition of the attributes causes the line length to exceed reasonable limits. _But, then you have other problems to consider._):
+In general, attributes are declared on their own lines, prefixing the type or declaration that they are supporting:
 
 ```swift
-@MainActor @discardableResult func epicTaskOnTheMainThread() -> Bool {
+@MainActor
+@discardableResult
+func epicTaskOnTheMainThread() -> Bool {
 }
 ...
 // Not
-@MainActor
-@discardableResult
-func notSoEpicTaskOnTheMainThread() -> Bool {
+@MainActor @discardableResult func notSoEpicTaskOnTheMainThread() -> Bool {
 }
 ```
 
-There is an exception to this rule, and that is the `@availabe` attribute:
+When used to decorate a parameter - such as the case with SwiftUI ViewBuilder/ResultBuilder attributes - they are not on their own lines:
 
 ```swift
-@available(*, deprecated, renamed: "otherFunction()")
-func thisFunction() {}
-
-
-@available(macOS 12.0, iOS 15.0, tvOS 13.05, watchOS 8.0, *)
-func usesLanguageFeaturesOnlyAvailableFromAPoint() {}
+func displayContent(
+  @ViewBuilder var builder: () -> Content
+) {
+  builder()
+}
 ```
 
 ### Line Wrapping
@@ -321,7 +378,7 @@ func swap<T>(_ a: inout T, _ b: inout T)
 
 ### Inference
 
-In general, let the compile do its thing and handle type inference for constants or variables. But add type declarations where clarity and comprehension are needed or required, such as empty array or dictionary initialization.
+In general, let the compiler do its thing and handle type inference for constants or variables. But add type declarations where clarity and comprehension are needed or required, such as empty array or dictionary initialization.
 
 ```swift
 let value = 23.7
